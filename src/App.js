@@ -1,23 +1,30 @@
-import logo from './logo.svg';
 import './App.css';
+import { useState, useEffect } from 'react';
+import List from './components/List';
+import Details from './components/Details';
 
 function App() {
+	const [users, setUsers] = useState([]);
+	const [selected, setSelected] = useState(null);
+	const [loading, setLoading] = useState(false);
+
+	useEffect(() => {
+		setLoading(true);
+		fetch(`${process.env.REACT_APP_DATA_URL}/users.json`)
+			.then((resp) => resp.json())
+			.then((data) => setUsers(data))
+			.finally(() => setLoading(false))
+	}, []);
+
+	const handleClick = (id) => {
+		const selectedUser = users.find(user => user.id === id);
+		setSelected(selectedUser);
+	}
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+			{loading ? <div>Загрузка...</div> : <List users={users} handleClick={handleClick} />}
+			{selected ? <Details info={selected} /> : null}
     </div>
   );
 }

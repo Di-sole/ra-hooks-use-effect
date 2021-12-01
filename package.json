@@ -1,5 +1,6 @@
 {
   "name": "use-effect",
+	"homepage": "https://di-sole.github.io/ra-hooks-use-effect",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
