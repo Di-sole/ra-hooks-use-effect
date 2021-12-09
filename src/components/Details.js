@@ -2,15 +2,24 @@ import { useEffect, useState } from "react";
 
 function Details({ info }) {
 	const [user, setUser] = useState(null);
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
-		fetch(`${process.env.REACT_APP_DATA_URL}/${info.id}.json`)
-			.then((resp) => resp.json())
-			.then((data) => setUser(data))
+		setLoading(true);
+		try {
+			fetch(`${process.env.REACT_APP_DATA_URL}/${info.id}.json`)
+				.then((resp) => resp.json())
+				.then((data) => setUser(data))
+		} catch (e) {
+			console.log(e)
+		} finally {
+			setLoading(false)
+		}
 	}, [info.id]);
 
 	return (
 		<>
+			{loading && <div>Loading...</div>}
 			{user && 
 				<div className="user-details">
 					<img src={user.avatar} alt={user.name}/>
